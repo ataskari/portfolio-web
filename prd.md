@@ -1,109 +1,107 @@
-# Product Requirements Document (PRD): atyrverse.id
+# Product Requirements Document (PRD): Professional Portfolio Ecosystem
+
+This document outlines the strategic, functional, and technical specifications for a high-performance, two-page professional portfolio designed to showcase engineering excellence and product thinking.
 
 ---
 
-## 1. Overview
+## 1. Strategic Overview
 
-**App Purpose:** A high-performance, interactive professional portfolio designed to showcase engineering projects through a curated "Best-of" gallery and a comprehensive, searchable archive.
+### Purpose & Problem Statement
 
-**The Problem:** Traditional resumes and static "link-in-bio" tools fail to capture the depth of technical projects. Recruiters and clients often have to hunt through GitHub repositories or long-form blogs to see actual results (videos, live demos, and code) in one place.
+In a crowded talent market, a standard resume often fails to convey the **depth of technical implementation** and **product intuition**. Most developer portfolios are either too cluttered or lack the "at-a-glance" impact required by busy hiring teams.
 
-**Primary Goal:** To provide a "frictionless discovery" experience for stakeholders to validate a developer's skills within 60 seconds of landing on the site.
+This application solves the "Proof of Work" problem by providing a high-signal, low-friction interface that balances visual storytelling with technical transparency.
 
----
+### Primary Goal
 
-## 2. Target Audience & User Types
-
-- **Primary User:** Recruiters and Hiring Managers looking for specific technical stacks.
-- **Secondary User:** Potential freelance clients seeking proof of previous work.
-- **Admin (The Developer):** The owner who manages, updates, and curates the project list.
+To convert a "visitor" (Recruiter/Lead) into an "inquirer" by demonstrating proficiency in modern web architecture, UI/UX polish, and organized project management within the first **30 seconds** of interaction.
 
 ---
 
-## 3. Core Features (MVP)
+## 2. Target Audience
 
-| Feature Name                         | User Goal (Why?)                                                     | Technical Functionality (How?)                                                                                                  |
-| ------------------------------------ | -------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| **Curated Hero Gallery**             | Instant exposure to the user's highest-quality work.                 | A "Top 4" grid fetched from the database filtered by a `featured` boolean flag.                                                 |
-| **Expandable Project Archive**       | Allow users to dig deeper into the full history of work.             | A "Show All" toggle that triggers a transition from the Top 4 view to a full grid/list view with pagination or infinite scroll. |
-| **Real-time Filter & Search**        | Quickly find projects by language, tool, or keyword.                 | Client-side filtering using state management (e.g., React `useMemo`) for instant UI updates as the user types.                  |
-| **Dynamic Project Details**          | View media (YouTube) and links (GitHub) without leaving the context. | A modal or dedicated sub-page that renders Markdown-based descriptions and embeds YouTube if a URL is provided in the schema.   |
-| **Professional Identity (About Me)** | Establish the "human" element and professional background.           | A dedicated route/section showcasing a bio, technical stack icons, and social proof.                                            |
+| Audience Segment    | Primary Need                                      | Desired Outcome                                       |
+| ------------------- | ------------------------------------------------- | ----------------------------------------------------- |
+| **Recruiters**      | Quick validation of skills and contact info.      | "Is this person a fit for the role? Let's reach out." |
+| **Tech Leads**      | Deep dive into code quality and stack complexity. | "How do they solve problems? Let's check the GitHub." |
+| **Peers/Community** | Inspiration and networking.                       | "This is a clean build. I want to follow their work." |
 
 ---
 
-## 4. User Flow (The "Happy Path")
+## 3. MVP Core Features
 
-1. **Landing:** User arrives at `atyrverse.id`.
-2. **Immediate Insight:** User sees the "Top 4" projects immediately on the Main page.
-3. **Exploration:** User clicks a "Featured" card; a detail view opens showing a YouTube demo and a GitHub link.
-4. **Deep Dive:** User closes the detail view and clicks "See All Projects."
-5. **Refinement:** User types "Next.js" in the search bar. The list instantly filters to show only Next.js projects.
-6. **Context:** User navigates to the "About Me" page to read the bio and professional history.
-7. **Conversion:** User clicks the "Contact" or "LinkedIn" link to reach out.
+| Feature Name           | User Goal                         | Technical Implementation Logic                                                                                            |
+| ---------------------- | --------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| **"Top 4" Hero Grid**  | Immediate exposure to best work.  | A priority-weighted query fetching the 4 most recent or "featured" projects from the DB.                                  |
+| **Interactive Modals** | Access details without page hops. | Client-side state management (or URL-based routing) to trigger detail views with YouTube/GitHub embeds.                   |
+| **Expandable Gallery** | Discover full breadth of work.    | A "Show More" toggle that lazily loads the remaining project set from a cached Supabase/Prisma query.                     |
+| **Real-time Filter**   | Locate specific tech stacks.      | Client-side filtering logic using an array of `tags`. Instant UI updates via state filtering (e.g., `projects.filter()`). |
+| **Mobile-First UX**    | Seamless viewing on the go.       | Responsive utility classes (Tailwind) ensuring the "Top 4" grid stacks gracefully.                                        |
 
 ---
 
-## 5. Technical System Design
+## 4. User Journey (The "Happy Path")
 
-### 5.1 Data Schema (SQL)
+1. **Landing:** The user lands on the **Main Page** and is greeted by a concise bio and the **Top 4** featured projects.
+2. **Discovery:** The user hovers over a project card (smooth scale effect) and clicks it.
+3. **Engagement:** A modal slides in showing a **YouTube demo**, a brief technical challenge/solution description, and a **GitHub link**.
+4. **Exploration:** The user closes the modal and clicks "View All Projects." The **Gallery** expands.
+5. **Filtering:** The user types "TypeScript" in the search bar. The gallery updates instantly to show relevant work.
+6. **Context:** The user navigates to **About Me** to read about the developer's journey and technical philosophy.
 
-The following schema is designed for a relational database like PostgreSQL, optimized for Prisma ORM.
+---
+
+## 5. Technical Architecture
+
+### Tech Stack Recommendation
+
+To ensure maintainability and performance, the following stack is recommended:
+
+- **Framework:** **Next.js 15 (App Router)** - Provides the best balance of Server-Side Rendering (SEO) and Client-Side Interactivity.
+- **Styling:** **Tailwind CSS** - Ensures a clean, utility-first design system without CSS bloat.
+- **Database & ORM:** **Supabase (PostgreSQL) + Prisma** - A robust, type-safe way to manage project data.
+- **Animations:** **Framer Motion** - For smooth layout transitions and modal interactions.
+- **Icons:** **Lucide-React** - Lightweight, consistent iconography.
+
+### Data Schema (Normalized SQL)
 
 ```sql
--- Projects Table
-CREATE TABLE "Project" (
-  "id" TEXT PRIMARY KEY,
-  "title" TEXT NOT NULL,
-  "slug" TEXT UNIQUE NOT NULL,
-  "description" TEXT NOT NULL,
-  "content" TEXT, -- Markdown for details
-  "thumbnailUrl" TEXT,
-  "youtubeUrl" TEXT,
-  "githubUrl" TEXT,
-  "liveUrl" TEXT,
-  "isFeatured" BOOLEAN DEFAULT false,
-  "createdAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  "updatedAt" TIMESTAMP
-);
+-- Project Table: Stores core metadata
+Table Projects {
+  id UUID [primary key]
+  title VARCHAR
+  description TEXT
+  slug VARCHAR [unique]
+  youtube_url VARCHAR
+  github_url VARCHAR
+  live_demo_url VARCHAR
+  is_featured BOOLEAN [default: false]
+  created_at TIMESTAMP
+}
 
--- Categories/Tags (Many-to-Many)
-CREATE TABLE "Tag" (
-  "id" TEXT PRIMARY KEY,
-  "name" TEXT UNIQUE NOT NULL
-);
+-- Technologies Table: Central list of tech (e.g., React, Prisma)
+Table Technologies {
+  id UUID [primary key]
+  name VARCHAR [unique]
+  icon_key VARCHAR -- For Lucide icon mapping
+}
 
--- Join Table for Project Tags
-CREATE TABLE "_ProjectToTag" (
-    "A" TEXT NOT NULL, -- Project ID
-    "B" TEXT NOT NULL  -- Tag ID
-);
+-- Many-to-Many Join Table
+Table Project_Technologies {
+  project_id UUID [ref: > Projects.id]
+  tech_id UUID [ref: > Technologies.id]
+}
 
 ```
 
-### 5.2 Technical Stack
+---
 
-To ensure a clean system and high performance, the following stack is recommended:
+## 6. Constraints & Design Principles
 
-- **Frontend:** **Next.js (App Router)** + **TypeScript**. (Standard for SEO and performance).
-- **Styling:** **Tailwind CSS** + **Shadcn/UI**. (Fastest way to build a professional, clean interface).
-- **Database & ORM:** **PostgreSQL** (via Supabase) + **Prisma**. (Type-safe database access and easy local development).
-- **Package Manager:** **pnpm**. (Faster, more efficient disk usage).
-- **Runtime:** **Node.js 24.x**.
-
-### 5.3 DevOps & Deployment
-
-- **Environment Setup:** Use **NVM** to lock Node versions.
-- **Hosting:** **Vercel** for the frontend and API routes (native Next.js support).
-- **Media Hosting:** YouTube for video embeds; Cloudinary or Vercel Blob for image hosting (thumbnails).
-- **CI/CD:** Automated deployments via GitHub integration on every `git push`.
+- **Clean Code Over Over-Engineering:** Avoid heavy state management libraries (Redux) unless the app scales beyond a portfolio. Use React `useState` and `useMemo` for filtering.
+- **Performance:** Image optimization via `next/image` is mandatory. The "Top 4" images should be pre-loaded.
+- **Type Safety:** Every project object must be strictly typed via TypeScript/Prisma to prevent runtime errors during the "Happy Path."
 
 ---
 
-## 6. Success Metrics (KPIs)
-
-1. **Retention/Time on Page:** Average session duration over 2 minutes (indicating users are watching demos).
-2. **Conversion Rate:** Number of clicks on "GitHub" or "LinkedIn" links relative to total unique visitors.
-3. **Performance Score:** Achieving a Lighthouse score of 90+ for Performance and SEO.
-
----
+Would you like me to generate the **Prisma Schema** file and the basic **Project Card component** logic to get the development started?
