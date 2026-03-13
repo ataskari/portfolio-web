@@ -21,8 +21,6 @@
   --color-input: #e4e4e7;
   --color-ring: #5c9f9e;
   --radius: 1.5rem;
-  
-  --font-sans: var(--font-sans);
 }
 
 @layer base {

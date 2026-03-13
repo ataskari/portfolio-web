@@ -1,9 +1,8 @@
 "use client";
 
 import React from "react";
-import { ArrowRight, Linkedin, Github, Mail, Download } from "lucide-react";
+import { Linkedin, Github, Mail, Download } from "lucide-react";
 import { motion } from "framer-motion";
-import Link from "next/link";
 
 export function Hero() {
   const [sequenceKey, setSequenceKey] = React.useState(0);
@@ -49,13 +48,16 @@ export function Hero() {
 
           <div className="flex gap-3">
             {[
-              { icon: Linkedin, color: "text-[#0A66C2]", link: "#linkedin" },
-              { icon: Github, color: "text-[#181717]", link: "#github" },
-              { icon: Mail, color: "text-[#EA4335]", link: "#email" },
+              { icon: Linkedin, color: "text-[#0A66C2]", link: "https://linkedin.com/in/YOUR_USERNAME", label: "LinkedIn" },
+              { icon: Github, color: "text-[#181717]", link: "https://github.com/ataskari", label: "GitHub" },
+              { icon: Mail, color: "text-[#EA4335]", link: "mailto:atryverse@gmail.com", label: "Email" },
             ].map((item, i) => (
               <a 
                 key={i} 
-                href={item.link} 
+                href={item.link}
+                aria-label={item.label}
+                target={item.link.startsWith("http") ? "_blank" : undefined}
+                rel={item.link.startsWith("http") ? "noopener noreferrer" : undefined}
                 className="bg-white w-12 h-12 rounded-full flex items-center justify-center shadow-sm hover:shadow-md hover:-translate-y-1 transition-all border border-gray-100 group"
               >
                  <item.icon size={20} className={`${item.color} group-hover:scale-110 transition-transform`} />

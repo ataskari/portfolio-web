@@ -4,7 +4,7 @@ import Link from "next/link";
 export function Navbar() {
   return (
     <div className="pt-6 px-4 md:px-8 w-full flex justify-center fixed top-0 z-50">
-      <nav className="flex items-center justify-between py-2 pl-4 pr-2 bg-white/80 backdrop-blur-md shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] border border-gray-100 rounded-full max-w-[1400px] w-full">
+      <nav aria-label="Main navigation" className="flex items-center justify-between py-2 pl-4 pr-2 bg-white/80 backdrop-blur-md shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] border border-gray-100 rounded-full max-w-[1400px] w-full">
         <Link href="/#hero" className="flex items-center gap-3 group">
           <div className="w-10 h-10 rounded-full bg-black text-white flex items-center justify-center font-bold text-lg group-hover:scale-105 transition-transform">
             A

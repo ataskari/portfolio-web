@@ -40,7 +40,8 @@ export function Contact() {
           </div>
           <h3 className="text-2xl font-bold">Book a call</h3>
           <p className="text-gray-400">Schedule a 30-minute discovery chat via Calendly.</p>
-          <a href="#" className="bg-white text-black px-6 py-3 rounded-full font-bold w-fit mt-auto hover:bg-gray-200 transition-colors">
+          {/* TODO: Replace href with your real Calendly link, e.g. https://calendly.com/YOUR_USERNAME */}
+          <a href="https://calendly.com/YOUR_USERNAME" target="_blank" rel="noopener noreferrer" className="bg-white text-black px-6 py-3 rounded-full font-bold w-fit mt-auto hover:bg-gray-200 transition-colors">
             Find a time
           </a>
         </div>

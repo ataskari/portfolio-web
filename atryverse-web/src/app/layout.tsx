@@ -8,8 +8,8 @@ const plusJakarta = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Professional Portfolio",
-  description: "Product Designer Portfolio",
+  title: "Atryverse | AI Product Engineer",
+  description: "Portfolio of an AI Product Engineer — building intelligent full-stack applications with Next.js, OpenAI, and modern cloud infrastructure.",
 };
 
 export default function RootLayout({

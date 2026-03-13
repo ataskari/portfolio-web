@@ -1,0 +1,61 @@
+// Prisma Schema — Portfolio Backend
+// Docs: https://pris.ly/d/prisma-schema
+// Mirrors the data model defined in the PRD.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+}
+
+// ─────────────────────────────────────────────
+// Projects — core portfolio entries
+// ─────────────────────────────────────────────
+model Project {
+  id           String   @id @default(uuid())
+  title        String
+  slug         String   @unique
+  description  String
+  year         String
+  imageBg      String   @default("bg-blue-200")
+  image_url    String?
+  is_featured  Boolean  @default(false)
+  youtube_url  String?
+  github_url   String?
+  live_demo_url String?
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
+
+  // Relation to tags (many-to-many via join table)
+  tags         ProjectTag[]
+
+  @@map("projects")
+}
+
+// ─────────────────────────────────────────────
+// Tags — normalized tech/category labels
+// ─────────────────────────────────────────────
+model Tag {
+  id       String       @id @default(uuid())
+  name     String       @unique  // e.g. "AI AGENTS", "RAG PIPELINE"
+
+  projects ProjectTag[]
+
+  @@map("tags")
+}
+
+// ─────────────────────────────────────────────
+// ProjectTag — join table (many-to-many)
+// ─────────────────────────────────────────────
+model ProjectTag {
+  project_id String
+  tag_id     String
+
+  project Project @relation(fields: [project_id], references: [id], onDelete: Cascade)
+  tag     Tag     @relation(fields: [tag_id], references: [id], onDelete: Cascade)
+
+  @@id([project_id, tag_id])
+  @@map("project_tags")
+}
