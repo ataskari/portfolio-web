@@ -7,9 +7,6 @@
 
 **Atryverse** is a high-performance, visually stunning portfolio designed to bridge the gap between technical implementation and product thinking. It provides a high-signal, low-friction interface that balances visual storytelling with technical transparency.
 
-![Atryverse Portfolio Mockup](https://raw.githubusercontent.com/placeholder-path/portfolio_mockup_1773389361322.png)
-_(Note: Replace with actual hosted image link or relative path after pushing)_
-
 ---
 
 ## ✨ Key Features
